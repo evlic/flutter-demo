@@ -1,6 +1,7 @@
-import 'demo-calculator/calculator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'demo-calculator/calculator.dart';
 
 // runApp(const MusicPlayer());
 void main() => runApp(const IdxApp());
@@ -31,6 +32,7 @@ class IdxApp extends StatelessWidget {
           ),
         ),
         home: const CalculatorApp(),
+        // 取消 debug 标志
         debugShowCheckedModeBanner: false,
       ),
     );
