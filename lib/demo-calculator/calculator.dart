@@ -1,5 +1,7 @@
 // ignore_for_file: deprecated_member_use, constant_identifier_names
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -28,8 +30,16 @@ class CalculatorState extends State<CalculatorApp> {
     "0", " ", ".", "=", //
   ];
 
-  static const TopKeys = ["AC", "∫", "%"];
-  static const OptKeys = ["÷", "✕", "-", "+", "="];
+  static const Set<String> TopKeys = {"AC", "∫", "%"};
+  static const Set<String> OptKeys = {"÷", "✕", "-", "+", "="};
+
+  static const Map<String, int> optMap = {
+    "÷": 2,
+    "✕": 2,
+    "-": 1,
+    "+": 1,
+  };
+
   static const OptShape = CircleBorder(
     side: BorderSide(
         // width: 2,
@@ -92,9 +102,58 @@ class CalculatorState extends State<CalculatorApp> {
     );
   }
 
-  int calculate(String s) {
-    var stack = <int>[];
-    return 1;
+  doCalculate(List<double> stack, String preOpt, double num) {
+    switch (preOpt) {
+      case "÷":
+        {
+          stack[stack.length - 1] /= num;
+        }
+        break;
+      case "✕":
+        {
+          stack[stack.length - 1] *= num;
+        }
+        break;
+      case "-":
+        {
+          stack.add(-1.0 * num);
+        }
+        break;
+      case "+":
+        {
+          stack.add(num);
+        }
+        break;
+    }
+  }
+
+  double calculate(String s) {
+    var stack = <double>[];
+    var num = 0.0;
+    var preOpt = "+";
+    var r = "";
+
+    for (int i = 0; i < s.length; i++) {
+      r = s[i];
+      if (!OptKeys.contains(r)) {
+        num = num * 10 + int.parse(r);
+      } else {
+        doCalculate(stack, preOpt, num);
+        preOpt = r;
+        num = 0.0;
+      }
+    }
+    doCalculate(stack, preOpt, num);
+
+    var res = 0.0;
+
+    log(stack.toString());
+
+    for (var value in stack) {
+      res += value;
+    }
+
+    return res;
   }
 
   opt(key) => (key) {};
@@ -113,7 +172,7 @@ class CalculatorState extends State<CalculatorApp> {
         break;
       case "=":
         {
-          W += calculate(W).toString();
+          W = calculate(W).toString();
         }
         break;
       default:
