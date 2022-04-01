@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "edu_flutter_android" "\0"
+            VALUE "FileDescription", "edu_flutter" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "edu_flutter_android" "\0"
+            VALUE "InternalName", "edu_flutter" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2022 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "edu_flutter_android.exe" "\0"
-            VALUE "ProductName", "edu_flutter_android" "\0"
+            VALUE "OriginalFilename", "edu_flutter.exe" "\0"
+            VALUE "ProductName", "edu_flutter" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

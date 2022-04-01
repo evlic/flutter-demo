@@ -1,6 +1,6 @@
 {
-    "name": "edu_flutter_android",
-    "short_name": "edu_flutter_android",
+    "name": "edu_flutter",
+    "short_name": "edu_flutter",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

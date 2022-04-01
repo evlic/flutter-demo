@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'demo-calculator/calculator.dart';
+import 'demo-login-form/loginPage.dart';
 
 // runApp(const MusicPlayer());
 void main() => runApp(const IdxApp());
@@ -31,7 +31,8 @@ class IdxApp extends StatelessWidget {
             button: TextStyle(fontSize: 48.sp),
           ),
         ),
-        home: const CalculatorApp(),
+        // home: const CalculatorApp(),
+        home: const LoginFormApp(),
         // 取消 debug 标志
         debugShowCheckedModeBanner: false,
       ),
