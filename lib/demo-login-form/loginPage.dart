@@ -8,12 +8,98 @@ class LoginFormApp extends StatefulWidget {
   State<StatefulWidget> createState() => _LoginState();
 }
 
+class POJO {
+  const POJO(this.label, this.inputA, this.inputB);
+  final String label;
+  final String inputA;
+  final String inputB;
+}
+
 class _LoginState extends State<LoginFormApp> {
   static const PAGE_BACKGROUND_COLOR = Colors.black;
   static const LINK_COLOR = Color(0xff4a80d8);
   static const LABLE_COLOR = Colors.white60;
   static const DEF_FONT = Colors.white;
+
+  static int idx = 0;
+
+  static Map<int, POJO> map = {
+    0: const POJO("请输入您的姓名", "姓氏", "名称"),
+    1: const POJO("请自定义您的账户信息", "用户名", "密码"),
+  };
+
   GlobalKey<FormState> loginKey = GlobalKey<FormState>();
+
+  POJO obj = map[idx] as POJO;
+
+  Widget btnNext() {
+    return Expanded(
+      child: Padding(
+        padding: EdgeInsets.all(10.sp),
+        child: Align(
+          alignment: Alignment.bottomRight,
+          child: SizedBox(
+            width: 54.sp * 4,
+            height: 100.sp,
+            child: ElevatedButton(
+              onPressed: () {
+                if (idx < map.length) {
+                  idx++;
+                  setState(() {
+                    obj = map[idx] as POJO;
+                  });
+                } else {}
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(LINK_COLOR),
+              ),
+              child: Text(
+                idx < map.length - 1 ? "下一步" : "提交",
+                style: TextStyle(
+                  color: PAGE_BACKGROUND_COLOR,
+                  fontSize: 40.sp,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget btnPrv() {
+    return Expanded(
+        child: Padding(
+      padding: EdgeInsets.all(10.sp),
+      child: Align(
+        alignment: Alignment.bottomLeft,
+        child: SizedBox(
+          width: 54.sp * 4,
+          height: 100.sp,
+          child: ElevatedButton(
+            onPressed: () {
+              if (idx >= 0) {
+                idx--;
+                setState(() {
+                  obj = map[idx] as POJO;
+                });
+              } else {}
+            },
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(LINK_COLOR),
+            ),
+            child: Text(
+              "上一步",
+              style: TextStyle(
+                color: PAGE_BACKGROUND_COLOR,
+                fontSize: 40.sp,
+              ),
+            ),
+          ),
+        ),
+      ),
+    ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +135,7 @@ class _LoginState extends State<LoginFormApp> {
                     Container(
                       margin: EdgeInsets.all(8),
                       child: Text(
-                        "请输入您的姓名",
+                        obj.label,
                         style: TextStyle(fontSize: 48.sp, color: LABLE_COLOR),
                       ),
                     ),
@@ -69,7 +155,7 @@ class _LoginState extends State<LoginFormApp> {
                                   borderRadius: BorderRadius.circular(10.sp),
                                 ),
                                 // labelText: '',
-                                hintText: "姓氏",
+                                hintText: obj.inputA,
                                 hintStyle: TextStyle(
                                   color: LABLE_COLOR,
                                   fontSize: 50.sp,
@@ -99,7 +185,7 @@ class _LoginState extends State<LoginFormApp> {
                                 ),
                                 labelStyle: const TextStyle(color: DEF_FONT),
                                 // labelText: '',
-                                hintText: "名字",
+                                hintText: obj.inputB,
                                 hintStyle: TextStyle(
                                   color: LABLE_COLOR,
                                   fontSize: 50.sp,
@@ -128,29 +214,11 @@ class _LoginState extends State<LoginFormApp> {
                 ),
               ),
               Expanded(
-                child: Padding(
-                  padding: EdgeInsets.all(10.sp),
-                  child: Align(
-                    alignment: Alignment.bottomRight,
-                    child: SizedBox(
-                      width: 54.sp * 4,
-                      height: 80.sp,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(LINK_COLOR),
-                        ),
-                        child: Text(
-                          "下一步",
-                          style: TextStyle(
-                            color: PAGE_BACKGROUND_COLOR,
-                            fontSize: 40.sp,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                child: Row(
+                  children: <Widget>[
+                    idx > 0 ? btnPrv() : Container(),
+                    btnNext(),
+                  ],
                 ),
               ),
             ],

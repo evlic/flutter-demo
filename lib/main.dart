@@ -32,6 +32,7 @@ class IdxApp extends StatelessWidget {
           ),
         ),
         // home: const CalculatorApp(),
+        // home: const LoginFormApp(),
         home: const LoginFormApp(),
         // 取消 debug 标志
         debugShowCheckedModeBanner: false,
