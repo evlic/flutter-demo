@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'demo-login-form/loginPage.dart';
+import 'demo-shopping-cart/shopping-cart.dart';
 
 // runApp(const MusicPlayer());
 void main() => runApp(const IdxApp());
@@ -26,14 +26,11 @@ class IdxApp extends StatelessWidget {
           );
         },
         // theme: ThemeData.dark(),
-        theme: ThemeData(
-          textTheme: TextTheme(
-            button: TextStyle(fontSize: 48.sp),
-          ),
-        ),
+        theme: ThemeData.dark(),
+
         // home: const CalculatorApp(),
         // home: const LoginFormApp(),
-        home: const LoginFormApp(),
+        home: const ShoppingCartApp(),
         // 取消 debug 标志
         debugShowCheckedModeBanner: false,
       ),

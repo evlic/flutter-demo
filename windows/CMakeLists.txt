@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
-project(edu_flutter LANGUAGES CXX)
+project(edu_flutter_shopping_cart LANGUAGES CXX)
 
-set(BINARY_NAME "edu_flutter")
+set(BINARY_NAME "edu_flutter_shopping_cart")
 
 cmake_policy(SET CMP0063 NEW)
 

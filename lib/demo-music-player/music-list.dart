@@ -1,4 +1,4 @@
-// // import 'package:edu_flutter/demo-music-player/var.dart';
+// // import 'package:edu_flutter_shopping_cart/demo-music-player/var.dart';
 // import 'package:flutter/material.dart';
 //
 // class MusicList extends StatelessWidget {

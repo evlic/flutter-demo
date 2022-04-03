@@ -1,6 +1,6 @@
 {
-    "name": "edu_flutter",
-    "short_name": "edu_flutter",
+    "name": "edu_flutter_shopping_cart",
+    "short_name": "edu_flutter_shopping_cart",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
