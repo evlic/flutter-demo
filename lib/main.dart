@@ -1,4 +1,4 @@
-import 'demo-calculator/calculator.dart';
+import 'demo-flappy-bird/gopher-bird.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -11,12 +11,12 @@ class IdxApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      // 自适应屏幕尺寸
+      // 自适应屏幕尺寸，填写的是我手机屏幕的分辨率
       designSize: const Size(1080, 2340),
       minTextAdapt: true,
       splitScreenMode: true,
       builder: () => MaterialApp(
-        title: "evlic@Flutter Demo",
+        title: "evlic@Flutter Demo Game",
         builder: (context, widget) {
           ScreenUtil.setContext(context);
           return MediaQuery(
@@ -25,13 +25,10 @@ class IdxApp extends StatelessWidget {
           );
         },
         // theme: ThemeData.dark(),
-        theme: ThemeData(
-          textTheme: TextTheme(
-            button: TextStyle(fontSize: 48.sp),
-          ),
-        ),
-        home: const CalculatorApp(),
+        theme: ThemeData.dark(),
+        // 关闭自带的 debug 标签
         debugShowCheckedModeBanner: false,
+        home: const FlappyBird(),
       ),
     );
   }

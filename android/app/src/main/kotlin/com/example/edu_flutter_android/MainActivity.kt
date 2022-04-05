@@ -1,4 +1,4 @@
-package com.example.edu_flutter_android
+package cloud.evlic.demo.flutter.game_android
 
 import io.flutter.embedding.android.FlutterActivity
 
