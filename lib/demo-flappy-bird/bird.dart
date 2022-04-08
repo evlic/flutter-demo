@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'size.dart';
 
 class Bird extends StatelessWidget {
   const Bird({
     Key? key,
     required this.birdY,
     this.onEnd,
-    required this.icon,
+    required this.birdImg,
   }) : super(key: key);
 
   final double birdY;
   final Function? onEnd;
-  final Image icon;
+  final Image birdImg;
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
@@ -22,12 +22,12 @@ class Bird extends StatelessWidget {
         onEnd?.call();
       },
       duration: const Duration(milliseconds: 500),
-      child: Container(
-        width: 200.w,
-        height: 200.h,
-        padding: EdgeInsets.all(10.sp),
+      child: SizedBox(
+        width: Sizes.birdW,
+        height: Sizes.birdH,
+        // padding: EdgeInsets.all(10.sp),
         // child: _Asset.spaceGirlGohper,
-        child: icon,
+        child: birdImg,
       ),
     );
   }

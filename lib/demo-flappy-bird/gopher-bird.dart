@@ -1,10 +1,13 @@
 import 'dart:async';
 import 'dart:math';
-import 'bird.dart';
-import 'score-board.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
+import 'bird.dart';
+import 'score-board.dart';
+import 'size.dart';
 
 class FlappyBird extends StatefulWidget {
   const FlappyBird({Key? key}) : super(key: key);
@@ -12,7 +15,7 @@ class FlappyBird extends StatefulWidget {
   State<FlappyBird> createState() => _FlappyBirdState();
 }
 
-class _Asset {
+class Assets {
   static const _eCLoudURL =
       "https://pub.evlic.cloud/coding/flutter-game/flappy-bird";
   // 默认文件后缀
@@ -29,13 +32,18 @@ class _Asset {
 
   // 背景图片
   // 独角兽
-  static late Image landGopherUnicorn = Image.asset(
+  static late Image aLandGopherUnicorn = Image.asset(
     "$_assetImg/gopher_unicorn.$_gopherSuffix",
+    fit: BoxFit.cover,
+  );
+
+  static late Image aSpaceGirlGohper = Image.asset(
+    "$_assetImg/space_gopher.$_gopherSuffix",
     fit: BoxFit.cover,
   );
 }
 
-class _Colors {
+class DefColors {
   static const background = Colors.black;
   static const defText = Colors.white;
   static const defBlur = Color(0x01f0f0f0);
@@ -45,59 +53,60 @@ class _Colors {
   // static const Background = Colors.black;
 }
 
-class _Text {
+class Texts {
   static TextStyle RunningText = TextStyle(
     fontSize: 100.sp,
-    color: _Colors.defText,
+    color: DefColors.defText,
   );
   // static const Background = Colors.black;
 
 }
 
-class _Size {
-  static double bird_h = 200.h;
-  static double bird_w = 200.w;
-
-  static double all_h = 1080.w;
-  static double all_w = 1080.w;
-
-  static double pip_w = 200.w;
-  // 中空的间隔
-  static double pip_spacing = 100.h;
-
-  // 柱间间隔
-  static double spacing = 0.2;
-}
-
 class _FlappyBirdState extends State<FlappyBird> {
   // 高度 上升为负，下降为正
   var _birdY = 0.1;
-  var _isRuning = false;
-  var _gameStatus_histroy = 100;
-  var _gameStatus_now = 0;
+  var _isRunning = false;
+
+  var _maxScore = 100;
+  var _nowScore = 0;
   var r = Random();
 
-  List<Widget> _gameArea = <Widget>[];
-  // List<double> _pipesX = [];
-  var x1 = 0.0, x2 = 0.4;
+  // 最大 pipe 数量
+  static const maxPipe = 5;
+  // 起点
+  static const startPipe = 0.8;
+  var pipeColor = DefColors.defPipe;
+  var pipBorder = BoxDecoration(
+      color: DefColors.defPipe,
+      // Red border with the width is equal to 5
+      border: Border.all(width: 5, color: Colors.red));
+  late List<double> pipeX;
+  late List<double> topRate;
 
   // 定时器
   late Timer timer;
+
   onJumpEnd() {
     setState(() {
       _birdY = 1.05;
     });
   }
 
-  jumpBird() {
+  logShow(String msg) {
     Fluttertoast.showToast(
-        msg: "fly Bird",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.black45,
-        textColor: Colors.white,
-        fontSize: 16.0);
+      msg: msg,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.black45,
+      textColor: DefColors.defText,
+      fontSize: 16.0,
+    );
+  }
+
+  // 跳
+  jumpBird() {
+    logShow("fly!");
     setState(() {
       if (_birdY >= -0.5) {
         _birdY -= 0.5;
@@ -107,63 +116,40 @@ class _FlappyBirdState extends State<FlappyBird> {
     });
   }
 
+  // 开始游戏
   startGame() {
-    setState(() {
-      _isRuning = true;
-      _gameStatus_now = 0;
-      // _birdY = 1;
-    });
-    initPipe();
+    _isRunning = true;
+    _nowScore = 0;
+
+    pipeX = List.generate(
+        maxPipe, (i) => startPipe + i * (Sizes.pip + Sizes.spacing));
+    topRate = List.generate(maxPipe, (i) => randomRate());
+
+    setState(() {});
+
+    _birdY = 1;
+    init();
   }
 
-  initPipe() {
-    buildGameArea();
-    // 初始化 pipes
-    // 计算 pipe 数量
-    // for (var i = 0; i < 1 / _Size.spacing; i++) {
-    // for (var i = 0; i < 2; i++) {
-    //   _pipesX.add(0.4 + i * _Size.spacing);
-    //   _pipes.add(buildPipe(
-    //     color: _Colors.defPipe,
-    //     width: _Size.pip_w,
-    //     spacing: _Size.pip_spacing,
-    //     idx: i,
-    //   ));
-    // }
-    // _gameArea.add(buildPipe(
-    //   color: _Colors.defPipe,
-    //   width: _Size.pip_w,
-    //   spacing: _Size.pip_spacing,
-    //   x: x1,
-    // ));
-
-    // _gameArea.add(buildPipe(
-    //   color: _Colors.defPipe,
-    //   width: _Size.pip_w,
-    //   spacing: _Size.pip_spacing,
-    //   x: x2,
-    // ));
-
-    // print("init len >> ${_pipes.length}");
-
+  // 初始化 pipe 需要的参数
+  // 并添加 定时任务
+  init() {
+    var maxX = 0.0;
     timer = Timer.periodic(const Duration(milliseconds: 50), (timer) {
-      // print("更新 ${_pipesX.toString()}");
-      // for (var i = 0; i < _pipesX.length; i++) {
-      //   if (_pipesX[i] < -1.1) {
-      //     _pipesX[i] = 0;
-      //     _pipes[i] = buildPipe(
-      //       color: _Colors.defPipe,
-      //       width: _Size.pip_w,
-      //       spacing: _Size.pip_spacing,
-      //       idx: i,
-      //     );
-      //   } else {
-      //     _pipesX[i] -= 0.02;
-      //   }
-      // }
-
-      x1 -= 0.02;
-      x2 -= 0.02;
+      var maxX = 0.0;
+      for (var v in pipeX) {
+        maxX = max(maxX, v);
+      }
+      for (var i = 0; i < maxPipe; i++) {
+        if (pipeX[i] < -1 - Sizes.pip) {
+          logShow(
+              "「$i」到达左边界，${pipeX[i]}\n转移到 >> ${max(1.0 + Sizes.pip, maxX + Sizes.spacing)}");
+          pipeX[i] = max(1.0 + Sizes.pip, maxX + Sizes.spacing);
+          topRate[i] = randomRate();
+        } else {
+          pipeX[i] -= 0.02;
+        }
+      }
       setState(() {});
     });
   }
@@ -172,14 +158,15 @@ class _FlappyBirdState extends State<FlappyBird> {
     return r.nextDouble();
   }
 
-  Widget buildPipe(
-      {required Color color,
-      required double width,
-      double? topRate,
-      required double spacing,
-      required double x}) {
+  Widget buildPipe({
+    Color color = DefColors.defPipe,
+    required double width,
+    double? topRate,
+    required double spacing,
+    required double x,
+  }) {
     topRate ??= randomRate();
-    // print("$idx >> ${_pipesX[idx]}");
+
     return Container(
       width: 1080.w,
       alignment: Alignment(x, 0),
@@ -189,34 +176,16 @@ class _FlappyBirdState extends State<FlappyBird> {
           Container(
             width: width,
             height: topRate * (1080.h - spacing),
-            color: _Colors.defPipe,
+            decoration: pipBorder,
           ),
           Container(
             width: width,
             height: (1 - topRate) * (1080.h - spacing),
-            color: color,
+            decoration: pipBorder,
           ),
         ],
       ),
     );
-  }
-
-  List<Widget> buildGameArea() {
-    for (var i = 0; i < 1 / _Size.spacing; i++) {
-      // for (var i = 0; i < 2; i++) {
-      _gameArea.add(buildPipe(
-        color: _Colors.defPipe,
-        width: _Size.pip_w,
-        spacing: _Size.pip_spacing,
-        x: x1,
-      ));
-    }
-    _gameArea.add(Bird(
-      birdY: _birdY,
-      onEnd: onJumpEnd,
-      icon: _Asset.spaceGirlGohper,
-    ));
-    return _gameArea;
   }
 
   @override
@@ -225,7 +194,7 @@ class _FlappyBirdState extends State<FlappyBird> {
       appBar: AppBar(
         title: const Text("evlic@Flappy Bird"),
       ),
-      body: _isRuning
+      body: _isRunning
           ? Container(
               width: 1080.w,
               height: 2340.h,
@@ -249,9 +218,46 @@ class _FlappyBirdState extends State<FlappyBird> {
                         // 游戏画面
                         child: Stack(
                           children: [
-                            // _gameArea.map((e) => e).toList()
-                            _gameArea[0], _gameArea[1], _gameArea[2],
-                            _gameArea[3], _gameArea[4], _gameArea[5],
+                            buildPipe(
+                              color: pipeColor,
+                              width: Sizes.pipW,
+                              spacing: Sizes.pipSpacingH,
+                              x: pipeX[0],
+                              topRate: topRate[0],
+                            ),
+                            buildPipe(
+                              color: DefColors.defPipe,
+                              width: Sizes.pipW,
+                              spacing: Sizes.pipSpacingH,
+                              x: pipeX[1],
+                              topRate: topRate[1],
+                            ),
+                            buildPipe(
+                              color: DefColors.defPipe,
+                              width: Sizes.pipW,
+                              spacing: Sizes.pipSpacingH,
+                              x: pipeX[2],
+                              topRate: topRate[2],
+                            ),
+                            buildPipe(
+                              color: DefColors.defPipe,
+                              width: Sizes.pipW,
+                              spacing: Sizes.pipSpacingH,
+                              x: pipeX[3],
+                              topRate: topRate[3],
+                            ),
+                            buildPipe(
+                              color: DefColors.defPipe,
+                              width: Sizes.pipW,
+                              spacing: Sizes.pipSpacingH,
+                              x: pipeX[4],
+                              topRate: topRate[4],
+                            ),
+                            Bird(
+                              birdY: _birdY,
+                              birdImg: Assets.aSpaceGirlGohper,
+                              onEnd: onJumpEnd,
+                            )
                           ],
                         ),
                       ),
@@ -262,10 +268,10 @@ class _FlappyBirdState extends State<FlappyBird> {
                   Expanded(
                     flex: 1,
                     child: GameScoreBoard(
-                      blurColor: _Colors.defBlur,
-                      highestScore: _gameStatus_histroy,
-                      nowScore: _gameStatus_now,
-                      img: _Asset.landGopherUnicorn,
+                      blurColor: DefColors.defBlur,
+                      highestScore: _maxScore,
+                      nowScore: _nowScore,
+                      img: Assets.aLandGopherUnicorn,
                     ),
                   )
                 ],
@@ -337,7 +343,7 @@ class WelcomeText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text("点击开始游戏", style: _Text.RunningText),
+      child: Text("点击开始游戏", style: Texts.RunningText),
     );
   }
 }
