@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'demo-shopping-cart/shopping-cart.dart';
+import 'demo-monkey/monkey.dart';
 
 // runApp(const MusicPlayer());
 void main() => runApp(const IdxApp());
@@ -27,10 +27,9 @@ class IdxApp extends StatelessWidget {
         },
         // theme: ThemeData.dark(),
         theme: ThemeData.dark(),
-
         // home: const CalculatorApp(),
         // home: const LoginFormApp(),
-        home: const ShoppingCartApp(),
+        home: const MonkeyApp(),
         // 取消 debug 标志
         debugShowCheckedModeBanner: false,
       ),

@@ -3,12 +3,16 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class ShoppingCartApp extends StatefulWidget {
-  const ShoppingCartApp({Key? key}) : super(key: key);
+class ElmMenuApp extends StatefulWidget {
+  const ElmMenuApp({Key? key}) : super(key: key);
 
   @override
   createState() => CartState();
 }
+
+// 3 + 1 + 1 编译原理、操作系统、编程语言
+// 项目:
+// 数据结构算法
 
 class ComColors {
   // 背景颜色
@@ -87,7 +91,7 @@ class Ware {
   final int priceNum;
 }
 
-class CartState extends State<ShoppingCartApp> {
+class CartState extends State<ElmMenuApp> {
   late List<Ware> wartList = <Ware>[
     Ware(
       Ware.eCloudImage("baixiang-thh"),
