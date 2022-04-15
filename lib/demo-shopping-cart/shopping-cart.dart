@@ -199,6 +199,7 @@ class CartState extends State<ShoppingCartApp> {
             children: resLit,
           ),
         ),
+        // 表单数据
         Container(
           padding: EdgeInsets.zero,
           margin: EdgeInsets.only(top: 5.sp, bottom: 25.sp),

@@ -37,6 +37,7 @@ class _MonkeyAppState extends State<MonkeyApp> {
         ),
       ),
       backgroundColor: ColorRs.backGround,
+      // body: MaterialPageRoute(builder: (BuildContext context) {  return buildApp()}),
       body: buildApp(),
     );
   }
@@ -52,7 +53,7 @@ class _MonkeyAppState extends State<MonkeyApp> {
       children: <Widget>[
         Row(
           children: [
-            Text("猴子恰桃数: ",style: Texts.monkeyTextStyle),
+            Text("猴子🐒恰桃数: ",style: Texts.monkeyTextStyle),
             Text(peachCnt.toString(), style: Texts.monkeyTextStyle),
           ],
         ),

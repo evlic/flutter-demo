@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="edu.evlic.edu_flutter_monkey">
+    package="edu.evlic.edu_flutter_login_save">
    <application
-        android:label="edu_flutter_monkey"
+        android:label="edu_flutter_login_save"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -38,4 +38,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!--  添加文件读写权限  -->
+    <uses-permission android:name="android.permission.MODE_WORLD_READABLE"/>
+    <uses-permission android:name="android.permission.MODE_WORLD_WRITEABLE"/>
 </manifest>

@@ -3,62 +3,18 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'css.dart';
+
 class ElmMenuApp extends StatefulWidget {
   const ElmMenuApp({Key? key}) : super(key: key);
 
   @override
-  createState() => CartState();
+  createState() => OrderState();
 }
 
-// 3 + 1 + 1 编译原理、操作系统、编程语言
-// 项目:
-// 数据结构算法
+// 点餐、评价、商家
+class Store {
 
-class ComColors {
-  // 背景颜色
-  static const backGroundColor = Colors.black;
-  // card 背景颜色
-  static const Color card = Color.fromARGB(0xff, 29, 29, 29);
-  // 默认字体颜色
-  static const Color def = Color.fromARGB(0xff, 236, 236, 236);
-  // sub 子字体颜色
-  static const Color sub = Color.fromARGB(0xff, 131, 131, 131);
-  // JD 红色
-  static const Color jdR = Color.fromARGB(0xff, 254, 56, 37);
-}
-
-class ComTextStyle {
-  // 店铺信息字体格式
-  static TextStyle trade = TextStyle(
-    color: ComColors.def,
-    fontSize: 32.sp,
-    fontWeight: FontWeight.w600,
-  );
-
-  // 商品标题 title
-  static TextStyle title = TextStyle(
-    color: ComColors.def,
-    fontSize: 36.sp,
-    fontWeight: FontWeight.w600,
-  );
-
-  // 商品选项
-  static TextStyle subTitle = TextStyle(
-      color: ComColors.sub, fontSize: 30.sp, fontWeight: FontWeight.normal);
-
-  // 商品价格
-  static TextStyle price = TextStyle(
-      color: ComColors.jdR, fontSize: 36.sp, fontWeight: FontWeight.w600);
-
-  // 商品数量
-  static TextStyle num = TextStyle(
-      color: ComColors.sub, fontSize: 28.sp, fontWeight: FontWeight.w600);
-
-  // 商品总价
-  static TextStyle cost = TextStyle(
-      color: ComColors.jdR, fontSize: 36.sp, fontWeight: FontWeight.w600);
-
-// static const TextStyle smallSize = TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal);
 }
 
 // 简易的商品类
@@ -91,7 +47,7 @@ class Ware {
   final int priceNum;
 }
 
-class CartState extends State<ElmMenuApp> {
+class OrderState extends State<ElmMenuApp> {
   late List<Ware> wartList = <Ware>[
     Ware(
       Ware.eCloudImage("baixiang-thh"),
@@ -238,7 +194,7 @@ class CartState extends State<ElmMenuApp> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(9),
                       gradient: const LinearGradient(colors: [
-                        ComColors.jdR,
+                        ComColors.elmBlue,
                         Color(0xffde53fc),
                         Color(0xff846dfc),
                         // Color(0xff30c1fd),
@@ -399,7 +355,7 @@ class CartState extends State<ElmMenuApp> {
       tristate: false,
       // 圆形
       shape: const CircleBorder(),
-      activeColor: ComColors.jdR,
+      activeColor: ComColors.elmBlue,
       checkColor: ComColors.def,
       value: value,
       onChanged: onChanged,

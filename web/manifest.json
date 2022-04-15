@@ -1,6 +1,6 @@
 {
-    "name": "edu_flutter_monkey",
-    "short_name": "edu_flutter_monkey",
+    "name": "edu_flutter_login_save",
+    "short_name": "edu_flutter_login_save",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
