@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="edu.evlic.flutter_elm">
+    package="edu.evlic.flutter_address_book">
    <application
-        android:label="flutter_elm"
+        android:label="flutter_address_book"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

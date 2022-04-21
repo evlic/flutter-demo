@@ -1,6 +1,6 @@
 {
-    "name": "flutter_elm",
-    "short_name": "flutter_elm",
+    "name": "flutter_address_book",
+    "short_name": "flutter_address_book",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

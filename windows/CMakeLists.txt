@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
-project(flutter_elm LANGUAGES CXX)
+project(flutter_address_book LANGUAGES CXX)
 
-set(BINARY_NAME "flutter_elm")
+set(BINARY_NAME "flutter_address_book")
 
 cmake_policy(SET CMP0063 NEW)
 
