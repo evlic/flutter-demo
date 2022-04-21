@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'demo-address-book/app.dart';
 
-
-
 // runApp(const MusicPlayer());
 void main() => runApp(const IdxApp());
 

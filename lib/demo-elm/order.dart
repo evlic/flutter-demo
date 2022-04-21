@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_address_book/util/toast.dart';
+import '/util/toast.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'css.dart';
@@ -175,7 +175,7 @@ class _ElmOrderMenuState extends State<ElmOrderApp> {
               onPressed: () {
                 var str = "您已选购: ";
                 wareMap.forEach((key, value) {
-                  if (value > 0 ) {
+                  if (value > 0) {
                     str += "${key.wareTitle} * $value\t";
                   }
                 });

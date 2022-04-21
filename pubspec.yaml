@@ -38,6 +38,7 @@ dependencies:
   flutter_screenutil: ^5.3.1
   path_provider: ^2.0.9
   fluttertoast: ^8.0.9
+  sqflite: ^2.0.2+1
 
 dev_dependencies:
   flutter_test:

@@ -1,11 +1,11 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_address_book/demo-elm/comment.dart';
-import 'package:flutter_address_book/demo-elm/order.dart';
-import 'package:flutter_address_book/demo-elm/store_info.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'comment.dart';
+import 'order.dart';
+import 'store_info.dart';
 import 'css.dart';
 
 const String title = "Fake ELM";

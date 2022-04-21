@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'address_home.dart';
+
 class AddressBookApp extends StatelessWidget {
   const AddressBookApp({Key? key}) : super(key: key);
+
+  static String title = "Gopher 通讯录";
 
   @override
   Widget build(BuildContext context) {
@@ -14,11 +18,10 @@ class AddressBookApp extends StatelessWidget {
           } else {
             return const CircularProgressIndicator();
           }
-        }
-    );
+        });
   }
 
   Future<Widget> _asyncBuildAppUI(BuildContext context) async {
-    return context.widget;
+    return AbHome(title);
   }
 }
