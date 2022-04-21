@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'demo-elm/app.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'demo-login-form-save/loginPage_save.dart';
 
 
 // runApp(const MusicPlayer());
@@ -17,7 +17,7 @@ class IdxApp extends StatelessWidget {
       designSize: const Size(1080, 2340),
       minTextAdapt: true,
       splitScreenMode: true,
-      builder: () => MaterialApp(
+      builder: (context) => MaterialApp(
         title: "evlic@Flutter Demo",
         builder: (context, widget) {
           ScreenUtil.setContext(context);
@@ -27,10 +27,10 @@ class IdxApp extends StatelessWidget {
           );
         },
         // theme: ThemeData.dark(),
-        theme: ThemeData.dark(),
+        // theme: ThemeData.dark(),
         // home: const CalculatorApp(),
         // home: const LoginFormApp(),
-        home: const LoginFormAndSaveApp(),
+        home: const ElmApp(),
         // 取消 debug 标志
         debugShowCheckedModeBanner: false,
       ),

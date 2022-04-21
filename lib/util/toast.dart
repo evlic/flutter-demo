@@ -11,7 +11,7 @@ logMsg({required String msg, int time = 300}) async {
       toastLength: time > 1000 ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT,
       gravity: ToastGravity.CENTER,
       timeInSecForIosWeb: 1,
-      backgroundColor: Colors.white12,
+      backgroundColor: Colors.black,
       textColor: Colors.white,
       fontSize: 50.sp
   );

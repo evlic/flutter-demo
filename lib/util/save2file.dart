@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:edu_flutter_login_save/util/toast.dart';
+import 'toast.dart';
 import 'package:path_provider/path_provider.dart';
 
 Future<String> get _localPath async {
@@ -10,14 +10,14 @@ Future<String> get _localPath async {
 }
 
 // 获取一个可以读写的文件对象
-Future<File> get _localFile async {
+Future<File> getLocalFile(String name) async {
   final path = await _localPath;
-  return File('$path/tmp.json');
+  return File('$path/name');
 }
 
 // 写入 string
-Future<File> write(String json) async {
-  final file = await _localFile;
+Future<File> write({String name = 'tmp', required String json}) async {
+  final file = await getLocalFile(name);
 
   // Write the file
   return file.writeAsString(json);
@@ -27,11 +27,10 @@ class ReadState {
   static const String error = "";
 }
 
-
 // 读取 String
-Future<String> read() async {
+Future<String> read({String name = 'tmp'}) async {
   try {
-    final file = await _localFile;
+    final file = await getLocalFile(name);
 
     // Read the file
     final json = await file.readAsString();
@@ -39,7 +38,7 @@ Future<String> read() async {
     return json;
   } catch (e) {
     // If encountering an error, return 0
-    logMsg(msg: "read error >> $e");
-    return "";
+    logMsg(msg: "文件未被创建, 将会在您初次提交后保存信息到文件中.");
+    return ReadState.error;
   }
 }

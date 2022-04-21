@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:edu_flutter_login_save/demo-login-form-save/save2file.dart';
-import 'package:edu_flutter_login_save/util/toast.dart';
+import '../util/save2file.dart';
+import '../util/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -65,7 +65,7 @@ class _LoginState extends State<LoginFormAndSaveApp> {
   static const DEF_FONT = Colors.white;
 
   static int idx = 0;
-  static bool inited = false;
+  var inited = false;
 
   static List<POJO> pojoList = [
     const POJO("请输入您的姓名", "姓氏", "名称"),
@@ -76,7 +76,10 @@ class _LoginState extends State<LoginFormAndSaveApp> {
 
   POJO obj = pojoList[idx];
 
-  late List<List<TextEditingController>> textController;
+  List<List<TextEditingController>> textController =  [
+    [TextEditingController(), TextEditingController()],
+    [TextEditingController(), TextEditingController()]
+  ];
 
   Widget btnNext() {
     return Expanded(
@@ -107,7 +110,7 @@ class _LoginState extends State<LoginFormAndSaveApp> {
     );
   }
 
-  void tapNext() {
+  tapNext() {
     if (idx < pojoList.length) {
       // defToast(msg: "$idx");
       if (idx == pojoList.length - 1) {
@@ -118,8 +121,9 @@ class _LoginState extends State<LoginFormAndSaveApp> {
         var usr = UserInfo.list2Usr(textController);
         var jsonStr = jsonEncode(usr.toJson());
         logMsg(msg: "执行保存 >> $jsonStr", time: 1000);
-        write(jsonStr);
+        write(json: jsonStr);
       } else {
+        // logMsg(msg: "当前 $idx 页数据 ${obj.inputA}:${textController[idx][0].text}|${obj.inputB}:${textController[idx][1].text}");
         idx++;
       }
       setState(() {
@@ -141,10 +145,10 @@ class _LoginState extends State<LoginFormAndSaveApp> {
           height: 100.sp,
           child: ElevatedButton(
             onPressed: () {
-              if (idx >= 0) {
+              if (idx > 0) {
                 idx--;
                 setState(() {
-                  obj = pojoList[idx] as POJO;
+                  obj = pojoList[idx];
                 });
               } else {}
             },
@@ -171,13 +175,14 @@ class _LoginState extends State<LoginFormAndSaveApp> {
       var user = UserInfo.fromJson(userMap);
       textController = user.usr2List();
       setState(() {});
-      logMsg(msg: '成功从文件系统中加载数据');
+      logMsg(msg: 'read $user');
     } else {
       logMsg(msg: '新建表单以供用户写入账户信息');
       textController = [
         [TextEditingController(), TextEditingController()],
         [TextEditingController(), TextEditingController()]
       ];
+      setState(() {});
     }
   }
 
@@ -185,10 +190,11 @@ class _LoginState extends State<LoginFormAndSaveApp> {
     if (!inited) {
       inited = !inited;
       // 读取历史数据
-      Future.wait([read()]).then((value) => {
-            render(value[0]),
-            logMsg(msg: "成功加载 >> $value"),
-          });
+      Future.wait([read()]).then((value) =>
+      {
+        render(value[0]),
+        logMsg(msg: "加载 >> $value"),
+      });
     }
   }
 

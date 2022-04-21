@@ -1,4 +1,4 @@
-package edu.evlic.edu_flutter_login_save
+package edu.evlic.flutter_elm
 
 import io.flutter.embedding.android.FlutterActivity
 

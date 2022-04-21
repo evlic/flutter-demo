@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
-project(edu_flutter_login_save LANGUAGES CXX)
+project(flutter_elm LANGUAGES CXX)
 
-set(BINARY_NAME "edu_flutter_login_save")
+set(BINARY_NAME "flutter_elm")
 
 cmake_policy(SET CMP0063 NEW)
 
