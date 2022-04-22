@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_address_book/demo-elm/css.dart';
 import 'package:flutter_address_book/util/toast.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'detail_page.dart';
+import 'img.dart';
 
 class User {
   int id;
@@ -10,6 +12,7 @@ class User {
   String email;
   String phoneNum;
   String avatarUrl;
+
   User(this.id, this.userName, this.email, this.phoneNum, this.avatarUrl);
 
   static List<User> testUsers = <User>[
@@ -20,6 +23,11 @@ class User {
     User(5, "xx4", "work4@xx.cm", "123436", "avatarUrl"),
   ];
 
+  @override
+  String toString() {
+    return 'User{id: $id, userName: $userName, email: $email, phoneNum: $phoneNum, avatarUrl: $avatarUrl}';
+  }
+
   static User map2User(Map<String, Object?> map) {
     return User(
       map["id"]! as int,
@@ -28,29 +36,5 @@ class User {
       map["phoneNum"]! as String,
       map["avatarUrl"]! as String,
     );
-  }
-}
-
-class UserLine extends StatelessWidget {
-  const UserLine({Key? key, required this.user}) : super(key: key);
-  final User user;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        // 样式调整...
-        padding: ComEdge.defAllEdge10,
-        margin: ComEdge.defAllEdge20,
-        child: GestureDetector(
-          onTap: () {
-            Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => UserInfoPage(user: user),
-                    ))
-                .then((value) =>
-                    value != null ? logMsg(msg: value) : print("null"));
-          },
-          child: Text("TODO"),
-        ));
   }
 }

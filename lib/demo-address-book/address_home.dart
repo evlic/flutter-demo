@@ -5,7 +5,9 @@ import 'package:flutter_address_book/demo-address-book/item.dart';
 import 'package:flutter_address_book/util/toast.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../demo-elm/css.dart';
 import '../util/save2file.dart';
+import 'img.dart';
 
 /* 
   通讯录的首页
@@ -16,6 +18,7 @@ import '../util/save2file.dart';
 class AbHome extends StatefulWidget {
   const AbHome(this.title, {Key? key}) : super(key: key);
   final String title;
+
   @override
   State<AbHome> createState() => _AbHomeState();
 }
@@ -33,16 +36,36 @@ class _AbHomeState extends State<AbHome> {
               initByMySelf();
             }));
   }
+  // 由于使用 SQLlite 的模糊查询遇到未知问题, 没有排除数据项, 所以选择手动实现
+  doFuzzy() {
+    print("手动 do fuzzy");
+    var delList = <User>[];
+    for (var value in dataList) {
+      if (!value.userName.startsWith(fuzzyIn.text)) {
+        delList.add(value);
+      }
+    }
+    for (var v in delList) {
+      dataList.remove(v);
+    }
+  }
 
   initByMySelf() async {
     String state = await read();
-    print("state >> $state");
+    // print("state >> $state");
     if (state != ReadState.error && state == "1") {
-      print("从数据库读取 user");
+      // print("从数据库读取 user");
       await DB.init();
-      dataList = await DB.queryUsers();
+      dataList = await DB.queryUsers(fuzzy: fuzzyIn.text);
+      if (fuzzyIn.text != "") {
+        doFuzzy();
+      } else {
+        print("fuzzy >>　raw");
+      }
+
+      logMsg(msg: fuzzyIn.text);
       setState(() {});
-      if (dataList.isEmpty) {
+      if (dataList.isEmpty && fuzzyIn.text == "") {
         await dataDef();
       }
     } else {
@@ -55,28 +78,33 @@ class _AbHomeState extends State<AbHome> {
     logMsg(msg: "读取默认，并写入数据库");
     for (var user in dataList) {
       DB.insertUser(user);
-      setState(() {});
     }
     var tmp = await DB.queryUsers();
+    setState(() {});
     if (tmp.isNotEmpty) {
-      print("默认数据写入数据库成功");
+      // print("默认数据写入数据库成功");
       await write(json: "1");
     } else {
-      print("默认数据写入数据库失败");
+      // print("默认数据写入数据库失败");
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    List<UserLine> widgetList = <UserLine>[];
+    List<Widget> widgetList = <Widget>[];
     for (var user in dataList) {
-      widgetList.add(UserLine(user: user));
+      widgetList.add(buildUserLine(user));
     }
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: ListView(children: widgetList),
+      body: Column(
+        children: [
+          buildSearchInput(),
+          Expanded(flex: 10, child: ListView(children: widgetList)),
+        ],
+      ),
       // 新增联系人按钮
       floatingActionButton: FloatingActionButton(
         child: Icon(
@@ -101,7 +129,7 @@ class _AbHomeState extends State<AbHome> {
         tooltip: "点击了 tooltip s ",
 
         ///设置悬浮按钮的背景
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.blue,
 
         ///获取焦点时显示的颜色
         focusColor: Colors.green,
@@ -116,11 +144,141 @@ class _AbHomeState extends State<AbHome> {
         foregroundColor: Colors.black,
 
         ///配制阴影高度 未点击时
-        elevation: 0.0,
+        elevation: 5.0,
 
         ///配制阴影高度 点击时
         highlightElevation: 20.0,
       ),
     );
+  }
+
+  Widget buildBtn({
+    required VoidCallback? onPressed,
+    required Widget? child,
+  }) {
+    return Container(
+      margin: ComEdge.defAllEdge10,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        child: child,
+      ),
+    );
+  }
+
+  ref() {
+    fuzzyIn.text= "";
+    Future.delayed(
+        Duration.zero,
+            () => setState(() {
+          initByMySelf();
+        }));
+  }
+
+  Widget buildRefBtn() {
+    return Expanded(
+        child: buildBtn(onPressed: ref, child: Icon(Icons.refresh)));
+  }
+
+  search() {
+    Future.delayed(
+        Duration.zero,
+            () => setState(() {
+          initByMySelf();
+
+        }));
+  }
+
+  Widget buildDoSearchBtn() {
+    return Expanded(
+        child: buildBtn(onPressed: search, child: Icon(Icons.search)));
+  }
+
+  var fuzzyIn = TextEditingController();
+
+  Widget buildFuzzyInput() {
+    return Expanded(
+      flex: 4,
+      child: TextFormField(
+        controller: fuzzyIn,
+        decoration: InputDecoration(
+          // border: OutlineInputBorder(
+          //   // borderSide: BorderSide(color: lableColor),
+          //   borderRadius: BorderRadius.circular(10.sp),
+          // ),
+          // labelText: '',
+          // hintText: infoList[idx],
+          hintStyle: TextStyle(
+            color: ComColors.sub,
+            fontSize: 50.sp,
+          ),
+          // prefixText: "${infoList[idx]}:",
+          // prefixIcon: Icon(Icons.person),
+        ),
+        style: TextStyle(
+          fontSize: 50.sp,
+        ),
+        onFieldSubmitted: (value) {},
+      ),
+    );
+  }
+
+  Widget buildSearchInput() => Container(
+        margin: ComEdge.defAllEdge20,
+        padding: ComEdge.defAllEdge10,
+        height: 120.sp,
+        child: Row(
+          children: [buildFuzzyInput(), buildRefBtn(), buildDoSearchBtn()],
+        ),
+      );
+
+  Container buildUserLine(User user) {
+    return Container(
+        // 样式调整...
+        padding: ComEdge.defAllEdge10,
+        margin: ComEdge.defAllEdge20,
+        child: GestureDetector(
+          onTap: () async {
+            var msg = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => UserInfoPage(user: user),
+                ));
+            print(">> get msg >>");
+            if (msg != null && msg != "") {
+              logMsg(msg: msg);
+              // print("msg >> $msg");
+              if (msg.startsWith("已删除")) {
+                user.id = -1;
+                dataList.remove(user);
+              }
+              setState(() {});
+            } else {
+              print("null");
+            }
+          },
+          //     value != null ? () {
+          //   logMsg(msg: value);
+          //   print("msg >> $value");
+          //   if (value.startsWith("已删除")) {
+          //     user.id = -1;
+          //   }
+          //   changed(user);
+          // } : print("null"));
+
+          child: Container(
+            padding: ComEdge.defAllEdge10,
+            margin: ComEdge.defAllEdge20,
+            height: 240.sp,
+            // width: 1080.w,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              // crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Images.buildAvatar(user),
+                Expanded(flex: 6, child: Text("「${user.userName}」")),
+              ],
+            ),
+          ),
+        ));
   }
 }

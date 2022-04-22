@@ -2,8 +2,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_address_book/demo-address-book/img.dart';
+import 'package:flutter_address_book/demo-elm/css.dart';
 import 'package:flutter_address_book/util/toast.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'dao.dart';
 import 'item.dart';
 
 class UserInfoPage extends StatefulWidget {
@@ -14,7 +17,8 @@ class UserInfoPage extends StatefulWidget {
 }
 
 class _UserInfoPageState extends State<UserInfoPage> {
-  late String msg;
+  String msg = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +26,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
           title: Text("「${widget.user.userName}」"),
           leading: BackButton(
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pop(context, msg);
             },
           ),
         ),
@@ -31,7 +35,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
             children: [
               Row(
                 children: [
-                  buildAvatar(),
+                  Images.buildAvatar(widget.user),
                   buildInfo(),
                 ],
               ),
@@ -42,44 +46,87 @@ class _UserInfoPageState extends State<UserInfoPage> {
         ));
   }
 
-  Widget buildAvatar() {
-    late Image res;
-    var aUrl = widget.user.avatarUrl;
-    var r = 0;
-    for (var i = 0; i < Images.imageUrl.length; i++) {
-      if (Images.imageUrl[i] == aUrl) {
-        r = i;
-        break;
-      }
-    }
+  Widget buildTextField(int idx, dynamic v) {
+    textController[idx].text = v.toString();
+    return  TextFormField(
+      controller: textController[idx],
 
-    if (r == 0) {
-      Random().nextInt(Images.images.length);
-    }
-
-    widget.user.avatarUrl = Images.imageUrl[r];
-    res = Images.images[r];
-
-    // todo 包装
-    return res;
+      decoration: InputDecoration(
+        // border: OutlineInputBorder(
+        //   // borderSide: BorderSide(color: lableColor),
+        //   borderRadius: BorderRadius.circular(10.sp),
+        // ),
+        // labelText: '',
+        hintText: infoList[idx],
+        hintStyle: TextStyle(
+          color: ComColors.sub,
+          fontSize: 50.sp,
+        ),
+        prefixText: "${infoList[idx]}:",
+        // prefixIcon: Icon(Icons.person),
+      ),
+      style: TextStyle(
+        fontSize: 50.sp,
+      ),
+      onFieldSubmitted: (value) {},
+    );
   }
+  List<String> infoList = <String>["姓名", "邮箱", "电话"];
+  List<TextEditingController> textController = [TextEditingController(), TextEditingController(), TextEditingController()];
+  GlobalKey<FormState> loginKey = GlobalKey<FormState>();
 
   Widget buildInfo() {
-    return Text("doing");
+    User user = widget.user;
+    return Expanded(
+      flex: 3,
+        child:Form(
+          //设置globalKey，用于后面获取FormState
+          key: loginKey,
+          //开启自动校验
+          // autovalidate: true,
+          child: Column(
+            children: <Widget>[
+              buildTextField(0, user.userName),
+              buildTextField(1, user.email),
+              buildTextField(2, user.phoneNum),
+
+            ],
+          ),
+        )
+    );
   }
 
   Widget buildOptArea() {
+    var list = [buildSaveBtn()];
+    if (widget.user.id > 0 ){
+      list.add(buildDelBtn());
+    }
     return Row(
-      children: [buildSaveBtn(), buildDelBtn()],
+      children: list,
     );
   }
 
   save() {
-    logMsg(msg: "will do save");
+    var user = widget.user;
+    user.userName = textController[0].text;
+    user.email = textController[1].text;
+    user.phoneNum = textController[2].text;
+    if (user.id < 0) {
+      DB.insertUser(user);
+      msg = "保存新增数据";
+    } else {
+      DB.saveUser(user);
+      msg = "执行保存更新数据";
+    }
+    Navigator.pop(context, msg);
+
   }
 
   del() {
-    logMsg(msg: "will do del");
+    DB.delUser(widget.user);
+    msg = "已删除 ${widget.user}";
+    print("del");
+    Navigator.pop(context, msg);
   }
 
   Widget buildSaveBtn() {
@@ -94,9 +141,12 @@ class _UserInfoPageState extends State<UserInfoPage> {
     required VoidCallback? onPressed,
     required Widget? child,
   }) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      child: child,
+    return Container(
+      margin: ComEdge.defAllEdge10,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        child: child,
+      ),
     );
   }
 }

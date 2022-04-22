@@ -1,5 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../demo-elm/css.dart';
+import 'item.dart';
 
 class Images {
   static final Image got =
@@ -21,4 +26,35 @@ class Images {
     "https://pub.evlic.cloud/icon/GOPHER_EDWARD.png",
     "https://pub.evlic.cloud/icon/GOPHER%20ACADEMY.png",
   ];
+
+
+  static Widget buildAvatar(User user) {
+    late Image res;
+    var r = -1;
+    for (var i = 0; i < Images.imageUrl.length; i++) {
+      if (Images.imageUrl[i] == user.avatarUrl) {
+        r = i;
+        break;
+      }
+    }
+
+    if (r == -1) {
+      r = Random().nextInt(Images.images.length);
+    }
+
+    user.avatarUrl = Images.imageUrl[r];
+    res = Images.images[r];
+
+    // todo 包装
+    return Expanded(
+      flex: 2,
+      child: Container(
+        padding: ComEdge.defAllEdge20,
+        margin: ComEdge.defAllEdge20,
+        child: ClipOval(
+            child: res
+        ),
+      ),
+    );
+  }
 }

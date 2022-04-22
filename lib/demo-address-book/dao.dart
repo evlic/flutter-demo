@@ -9,16 +9,18 @@ import 'package:sqflite/sqflite.dart';
 import 'item.dart';
 
 class DB {
-  static late String databasesPath;
-  static late Database database;
+  static String dbsPath = "";
 
   static init({String dbName = "demo.db"}) async {
-    databasesPath = await getDatabasesPath();
-    database = await firstOpen(dbName: dbName);
+    dbsPath = await getDatabasesPath();
   }
 
-  static Future<Database> firstOpen({String dbName = "demo.db"}) async {
-    return openDatabase(join(databasesPath, dbName), version: 1,
+  static Future<Database> open({String dbName = "demo.db"}) async {
+    if (dbsPath == "") {
+      await init();
+    }
+
+    return await openDatabase(join(dbsPath, dbName), version: 1,
         onCreate: (Database db, int version) async {
       // When creating the db, create the table
       await db.execute(
@@ -31,14 +33,17 @@ class DB {
       {String dbName = "demo.db", String fuzzy = ""}) async {
     late List<Map<String, Object?>> res;
     late String SQL;
+    var db = await open();
+
     if (fuzzy != "") {
       SQL =
-          'SELECT * FROM Test WHERE userName like "$fuzzy%" or email like "$fuzzy%" or phoneNum like "$fuzzy%"';
+          // 'SELECT * FROM Test WHERE `userName` like "$fuzzy%" or email like "$fuzzy%" or phoneNum like "$fuzzy%"';
+          'SELECT * FROM Test WHERE userName LIKE "$fuzzy%"';
     } else {
       SQL = 'SELECT * FROM Test';
     }
     logMsg(msg: "doSQL -> $SQL");
-    res = await database.rawQuery('SELECT * FROM Test');
+    res = await db.rawQuery('SELECT * FROM Test');
 
     print("queryRes >> $res");
 
@@ -46,12 +51,15 @@ class DB {
     res.forEach((element) {
       product.add(User.map2User(element));
     });
+
+
     return product;
   }
 
   // 保存 update
   static saveUser(User user) async {
-    await database.transaction((txn) async {
+    var db = await open();
+    await db.transaction((txn) async {
       String SQL =
           'UPDATE Test SET userName = ?, email = ?, phoneNum = ?, avatarUrl = ? WHERE id = ? | ${[
         user.userName,
@@ -62,16 +70,18 @@ class DB {
       ]}';
       logMsg(msg: "doSQL -> $SQL");
 
-      int count = await database.rawUpdate(
+      int count = await db.rawUpdate(
           'UPDATE Test SET userName = ?, email = ?, phoneNum = ?, avatarUrl = ? WHERE id = ?',
           [user.userName, user.email, user.phoneNum, user.avatarUrl, user.id]);
       logMsg(msg: 'updated -> $count');
     });
+
   }
 
   // 插入 user 数据
   static insertUser(User user, {String dbName = "demo.db"}) async {
-    await database.transaction((txn) async {
+    var db = await open();
+    await db.transaction((txn) async {
       String SQL =
           'INSERT INTO Test(userName, email, phoneNum, avatarUrl) VALUES ("${user.userName}", "${user.email}","${user.phoneNum}", "${user.avatarUrl}")';
       // logMsg(msg: "doSQL -> $SQL");
@@ -79,10 +89,11 @@ class DB {
       // logMsg(msg: 'inserted: $newId');
       user.id = newId;
     });
+
   }
 
   // static insertUsers(List<User> users, {String dbName = "demo.db"}) async {
-  //   await database.transaction((txn) async {
+  //   await db.transaction((txn) async {
   //     String SQL =
   //         'INSERT INTO Test(id, userName, email, phoneNum, avatarUrl) VALUES (${user.id}, "${user.userName}", "${user.phoneNum}", "${user.avatarUrl}")';
   //     // logMsg(msg: "doSQL -> $SQL");
@@ -94,11 +105,16 @@ class DB {
   // TODO 删除
   static delUser(User user, {String dbName = "demo.db"}) async {
     // Delete a record
-    // count = await database
+    // count = await db
     //     .rawDelete('DELETE FROM Test WHERE name = ?', ['another name']);
-    // assert(count == 1);
 
-    // Close the database
-    // await database.close();
+
+    var db = await open();
+    await db.transaction((txn) async {
+      String SQL =
+          'DELETE FROM Test WHERE id = ?';
+      // logMsg(msg: "doSQL -> $SQL");
+      int cnt = await txn.rawDelete(SQL, [user.id]);
+    });
   }
 }
