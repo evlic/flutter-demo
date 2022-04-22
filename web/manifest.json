@@ -1,6 +1,6 @@
 {
-    "name": "flutter_address_book",
-    "short_name": "flutter_address_book",
+    "name": "flutter_address_book_local",
+    "short_name": "flutter_address_book_local",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

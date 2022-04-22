@@ -1,3 +1,4 @@
+import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_address_book_local/demo-elm/css.dart';
 import 'package:flutter_address_book_local/util/toast.dart';
@@ -36,5 +37,23 @@ class User {
       map["phoneNum"]! as String,
       map["avatarUrl"]! as String,
     );
+  }
+
+  static String item2String(Item? item){
+    if (item == null) { return ""; }
+    return item.value!;
+  }
+
+  static User contact2User(Contact contact) {
+    var userName = "";
+    var email = "";
+    var phoneNum = "";
+    var avatarUrl = "avatarUrl";
+
+    if (contact.displayName != null) {userName =  contact.displayName!;}
+    if (contact.emails != null &&contact.emails!.isNotEmpty) {email =  item2String(contact.emails![0]);}
+    if (contact.phones != null &&contact.phones!.isNotEmpty) {phoneNum =  item2String(contact.phones![0]);}
+
+    return User(-1, userName, email, phoneNum, avatarUrl);
   }
 }

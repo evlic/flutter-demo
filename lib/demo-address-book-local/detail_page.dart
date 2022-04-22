@@ -1,9 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_address_book_local/demo-address-book/img.dart';
-import 'package:flutter_address_book_local/demo-elm/css.dart';
-import 'package:flutter_address_book_local/util/toast.dart';
+import '../demo-elm/css.dart';
+import 'img.dart';
+import 'css.dart';
+import '/util/toast.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'dao.dart';
@@ -39,7 +40,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
                   buildInfo(),
                 ],
               ),
-              buildOptArea()
+              // buildOptArea()
               // 操作区
             ],
           ),
@@ -107,19 +108,19 @@ class _UserInfoPageState extends State<UserInfoPage> {
   }
 
   save() {
-    var user = widget.user;
-    user.userName = textController[0].text;
-    user.email = textController[1].text;
-    user.phoneNum = textController[2].text;
-    if (user.id < 0) {
-      DB.insertUser(user);
-      msg = "保存新增数据";
-    } else {
-      DB.saveUser(user);
-      msg = "执行保存更新数据";
-    }
-    Navigator.pop(context, msg);
-
+    // var user = widget.user;
+    // user.userName = textController[0].text;
+    // user.email = textController[1].text;
+    // user.phoneNum = textController[2].text;
+    // if (user.id < 0) {
+    //   DB.insertUser(user);
+    //   msg = "保存新增数据";
+    // } else {
+    //   DB.saveUser(user);
+    //   msg = "执行保存更新数据";
+    // }
+    // Navigator.pop(context, msg);
+    logMsg(msg: "readOnly");
   }
 
   del() {

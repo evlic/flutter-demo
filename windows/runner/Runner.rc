@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "edu.evlic" "\0"
-            VALUE "FileDescription", "flutter_address_book" "\0"
+            VALUE "FileDescription", "flutter_address_book_local" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "flutter_address_book" "\0"
+            VALUE "InternalName", "flutter_address_book_local" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2022 edu.evlic. All rights reserved." "\0"
-            VALUE "OriginalFilename", "flutter_address_book.exe" "\0"
-            VALUE "ProductName", "flutter_address_book" "\0"
+            VALUE "OriginalFilename", "flutter_address_book_local.exe" "\0"
+            VALUE "ProductName", "flutter_address_book_local" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

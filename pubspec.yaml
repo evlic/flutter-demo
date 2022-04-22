@@ -1,4 +1,4 @@
-name: flutter_address_book
+name: flutter_address_book_local
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -39,6 +39,9 @@ dependencies:
   path_provider: ^2.0.9
   fluttertoast: ^8.0.9
   sqflite: ^2.0.2+1
+  contacts_service: ^0.6.3
+  permission_handler: ^9.2.0
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

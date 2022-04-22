@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'demo-address-book-local/address_home.dart';
 import 'demo-address-book/app.dart';
 
 // runApp(const MusicPlayer());
@@ -28,7 +29,7 @@ class IdxApp extends StatelessWidget {
         // theme: ThemeData.dark(),
         // home: const CalculatorApp(),
         // home: const LoginFormApp(),
-        home: const AddressBookApp(),
+        home: const AbHomeLocal("Go 通讯录"),
         // 取消 debug 标志
         debugShowCheckedModeBanner: false,
       ),

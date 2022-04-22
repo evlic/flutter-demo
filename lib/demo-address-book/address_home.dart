@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_address_book/demo-address-book/dao.dart';
-import 'package:flutter_address_book/demo-address-book/detail_page.dart';
-import 'package:flutter_address_book/demo-address-book/item.dart';
-import 'package:flutter_address_book/util/toast.dart';
+import 'package:flutter_address_book_local/demo-address-book/dao.dart';
+import 'package:flutter_address_book_local/demo-address-book/detail_page.dart';
+import 'package:flutter_address_book_local/demo-address-book/item.dart';
+import 'package:flutter_address_book_local/util/toast.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../demo-elm/css.dart';

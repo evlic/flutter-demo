@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
-project(flutter_address_book LANGUAGES CXX)
+project(flutter_address_book_local LANGUAGES CXX)
 
-set(BINARY_NAME "flutter_address_book")
+set(BINARY_NAME "flutter_address_book_local")
 
 cmake_policy(SET CMP0063 NEW)
 
